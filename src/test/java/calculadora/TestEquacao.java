@@ -4,6 +4,11 @@ import equacao.Equacao;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+
+
 class TestEquacao {
 
     /**
@@ -101,12 +106,16 @@ class TestEquacao {
      * x1=NaN
      * x2=NaN
      */
-    @Test
-    void testGetDeltaMenorQueZero() {
-        Equacao equacao = new Equacao(1.0, 1.0, 1.0);
-        double retornoEsperado = -3.0;
-        double retornoFeito = equacao.getDelta();
-        assertEquals(retornoEsperado, retornoFeito, 0.0001);
+    @ParameterizedTest
+    @CsvSource({
+        "1.0, 1.0, 1.0, -3.0",     // delta = 1² - 4*1*1 = -3
+        "1.0, -2.0, 1.0, 0.0",     // delta = (-2)² - 4*1*1 = 0
+        "1.0, 5.0, 6.0, 1.0"       // delta = 25 - 24 = 1
+    })
+    void testGetDelta(double a, double b, double c, double deltaEsperado) {
+        Equacao equacao = new Equacao(a, b, c);
+        double deltaCalculado = equacao.getDelta();
+        assertEquals(deltaEsperado, deltaCalculado, 0.0001);
     }
         
     /**
